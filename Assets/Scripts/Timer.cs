@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 using TMPro;
+
 
 
 public class Timer : MonoBehaviour
@@ -13,6 +15,8 @@ public class Timer : MonoBehaviour
     float timeRemaining;
 
     public TMP_Text countdownText;
+
+    public UnityEvent OnTimerFinish;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +34,7 @@ public class Timer : MonoBehaviour
         } else
         {
             Cursor.lockState = CursorLockMode.None;
-            SceneManager.LoadScene(0);
+            OnTimerFinish.Invoke();
         }
 
     }
