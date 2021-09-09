@@ -18,16 +18,20 @@ public class InteractionArea : MonoBehaviour
     //On trigger enter, focus the camera on the keycode entry pad, so player can use mouse
     private void OnTriggerEnter(Collider other)
     {
-        
         if (!isCompleted)
         {
             if (other.CompareTag("Player"))
             {
                 player = other.gameObject;
+                if (player == null)
+                {
+                    player = FindObjectOfType<PlayerMovement>().gameObject;
+                }
                 playerCamera.transform.parent = transform;
                 playerCamera.transform.localPosition = Vector3.zero;
                 playerCamera.transform.rotation = Quaternion.identity;
                 Cursor.lockState = CursorLockMode.Confined;
+                FindObjectOfType<PlayerMovement>().enabled = false;
             }
         }
     }
@@ -46,11 +50,17 @@ public class InteractionArea : MonoBehaviour
 
     public void RemoveCamera(GameObject player)
     {
-
+        if (player == null)
+        {
+            player = FindObjectOfType<PlayerMovement>().gameObject;
+        }
         playerCamera.transform.parent = player.transform.parent;
         playerCamera.transform.localPosition = Vector3.zero;
         playerCamera.transform.rotation = Quaternion.Euler(0f, -270, 0f);
         Cursor.lockState = CursorLockMode.Locked;
+        FindObjectOfType<PlayerMovement>().enabled = true;
+
+
     }
 
     //Once the puzzle is solved, remove this script so player can freely go through door
@@ -60,8 +70,8 @@ public class InteractionArea : MonoBehaviour
         RemoveCamera(player);
     }
 
-    //public void OnLeave()
-    //{
-    //    RemoveCamera(player);
-    //}
+    public void OnLeave()
+    {
+        RemoveCamera(player);
+    }
 }
