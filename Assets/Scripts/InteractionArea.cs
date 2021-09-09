@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 
 
@@ -14,6 +15,9 @@ public class InteractionArea : MonoBehaviour
 
     //Has the puzzle been solved?
     bool isCompleted;
+
+    public UnityEvent OnAreaEnter;
+    public UnityEvent OnAreaExit;
 
     //On trigger enter, focus the camera on the keycode entry pad, so player can use mouse
     private void OnTriggerEnter(Collider other)
@@ -31,7 +35,8 @@ public class InteractionArea : MonoBehaviour
                 playerCamera.transform.localPosition = Vector3.zero;
                 playerCamera.transform.rotation = Quaternion.identity;
                 Cursor.lockState = CursorLockMode.Confined;
-                FindObjectOfType<PlayerMovement>().enabled = false;
+
+                OnAreaEnter.Invoke();
             }
         }
     }
@@ -58,7 +63,9 @@ public class InteractionArea : MonoBehaviour
         playerCamera.transform.localPosition = Vector3.zero;
         playerCamera.transform.rotation = Quaternion.Euler(0f, -270, 0f);
         Cursor.lockState = CursorLockMode.Locked;
-        FindObjectOfType<PlayerMovement>().enabled = true;
+
+        OnAreaExit.Invoke();
+
 
 
     }
